@@ -68,21 +68,38 @@ function MyDrawer(param : DrawerParms) {
 }
 
 const CustomDrawer = (props:any) => {
-  function drawerHeader(title : string){
-    return (<View style={Styles.drawerHeader}>
-      <Text>
-      {title}
-      </Text>
-  </View>);
+
+  const type = typeof View;
+  
+  function drawerHeader(title? : string, view? : typeof View){
+    if (view !== undefined){
+      return <view/>
+    }
+    if (title !== undefined){      
+      return (<View style={Styles.drawerHeader}>
+      <Text>{title}</Text></View>);
+    }
   }
 
-  function drawerFooter(buttonListProps : ButtonProps[]){
-    return (<View style={Styles.drawerFooter}>
-          {buttonListProps.map(btm => <Button title={btm.title} color={btm.color}
-          onPress={btm.onPress} />)}
-      </View>);
-  }
+  function drawerFooter(buttonListProps : ButtonProps[], text? : string, view? : typeof View){
+    if (buttonListProps.length !==0){
+        return (<View style={Styles.drawerFooter}>
+              {buttonListProps.map(btm => <Button title={btm.title} color={btm.color}
+              onPress={btm.onPress} />)}
+          </View>);
+    }
+    if (view !== undefined) {
+        return <view/>
+    }
 
+    if (text !== null) {
+        return <View style={Styles.drawerFooter}><Text>{text}</Text></View>
+    }
+  }
+  
+  function ViewDrawerHeaderExmple() : typeof View{
+    return(<View><Text>view</Text></View>)
+  }
   function makeBtnList(numOfItem: number){
     let buttonListProps : ButtonProps[] = [];
     for(let i =0; i< numOfItem; i++){
@@ -92,13 +109,17 @@ const CustomDrawer = (props:any) => {
   }
   return (
     <View style={Styles.container}>
-      {drawerHeader("Drawer Header")}
+      {/* {drawerHeader("Drawer Header")} */}
+      {/* {drawerHeader(ViewDrawerHeaderExmple())} */}
       <View style={Styles.drawerContentScrollView}>
       <DrawerContentScrollView {...props} contentContainerStyle={Styles.container}>
         <DrawerItemList {...props}/>
       </DrawerContentScrollView>
       </View>
-      {drawerFooter(makeBtnList(3))}
+      {/* {drawerFooter(makeBtnList(3))} */}
+      {/* {drawerFooter([],ViewDrawerHeaderExmple())} */}
+      {/* {drawerFooter([],"drawerFooter")} */}
+      {drawerFooter([])}
     </View>
   );
 }
